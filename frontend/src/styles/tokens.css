@@ -1,0 +1,138 @@
+/* ==========================================================================
+   DRIVORA BRAND DESIGN TOKENS
+   Master Token System adhering to the official Drivora palette:
+   - Deep Forest Teal: #173D39
+   - Dark Teal: #102E2B
+   - Muted Sage Teal: #68877C
+   - Champagne Gold: #D8AD7E
+   - Warm Sand Gold: #E8C49C
+   - Soft Ivory: #F8F5EF
+   - White: #FFFFFF
+   - Slate Grey: #626B68
+   ========================================================================== */
+
+:root {
+  /* Primitive Brand Colors */
+  --color-deep-forest-teal: #173d39;
+  --color-dark-teal: #102e2b;
+  --color-muted-sage-teal: #68877c;
+  --color-champagne-gold: #d8ad7e;
+  --color-warm-sand-gold: #e8c49c;
+  --color-soft-ivory: #f8f5ef;
+  --color-white: #ffffff;
+  --color-slate-grey: #626b68;
+
+  /* Typography */
+  --font-display: 'Kanit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Spacing Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* Border Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow: 400ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Elevation & Shadows (Light Baseline) */
+  --shadow-sm: 0 2px 6px rgba(16, 46, 43, 0.05);
+  --shadow-md: 0 8px 24px rgba(16, 46, 43, 0.08);
+  --shadow-lg: 0 16px 40px rgba(16, 46, 43, 0.12);
+  --shadow-gold: 0 8px 25px rgba(216, 173, 126, 0.25);
+
+  /* Light Theme Semantic Mapping (Default) */
+  --bg-primary: #f8f5ef;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fcfbf8;
+  --bg-input: #f4f0e6;
+  --bg-muted: #e6e0d2;
+
+  --border-subtle: rgba(23, 61, 57, 0.12);
+  --border-strong: rgba(23, 61, 57, 0.25);
+  --border-gold: rgba(216, 173, 126, 0.5);
+
+  --text-primary: #102e2b;
+  --text-secondary: #626b68;
+  --text-muted: #68877c;
+  --text-on-dark: #f8f5ef;
+  --text-gold: #b3844f;
+
+  --accent-gold: #d8ad7e;
+  --accent-gold-hover: #e8c49c;
+  --brand-teal: #173d39;
+  --brand-teal-dark: #102e2b;
+
+  --badge-bg: rgba(23, 61, 57, 0.08);
+  --badge-text: #173d39;
+
+  --danger-bg: rgba(185, 28, 28, 0.1);
+  --danger-text: #991b1b;
+  --danger-border: rgba(185, 28, 28, 0.3);
+
+  --success-bg: rgba(23, 61, 57, 0.1);
+  --success-text: #102e2b;
+  --success-border: rgba(23, 61, 57, 0.3);
+}
+
+/* Dark Theme Semantic Mapping */
+[data-theme='dark'] {
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.7);
+  --shadow-gold: 0 8px 30px rgba(216, 173, 126, 0.2);
+
+  --bg-primary: #102e2b;
+  --bg-surface: #173d39;
+  --bg-surface-elevated: #1e4a45;
+  --bg-card: #153935;
+  --bg-card-hover: #1b4742;
+  --bg-input: #0e2724;
+  --bg-muted: #204c47;
+
+  --border-subtle: rgba(104, 135, 124, 0.25);
+  --border-strong: rgba(104, 135, 124, 0.45);
+  --border-gold: rgba(216, 173, 126, 0.4);
+
+  --text-primary: #f8f5ef;
+  --text-secondary: #c0d0c8;
+  --text-muted: #8aa299;
+  --text-on-dark: #f8f5ef;
+  --text-gold: #d8ad7e;
+
+  --accent-gold: #d8ad7e;
+  --accent-gold-hover: #e8c49c;
+  --brand-teal: #d8ad7e;
+  --brand-teal-dark: #e8c49c;
+
+  --badge-bg: rgba(216, 173, 126, 0.12);
+  --badge-text: #d8ad7e;
+
+  --danger-bg: rgba(220, 38, 38, 0.18);
+  --danger-text: #fca5a5;
+  --danger-border: rgba(220, 38, 38, 0.4);
+
+  --success-bg: rgba(216, 173, 126, 0.15);
+  --success-text: #e8c49c;
+  --success-border: rgba(216, 173, 126, 0.4);
+}
