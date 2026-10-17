@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { X, Calendar, DollarSign, User, AlertCircle, CheckCircle2, ShieldCheck, Loader2 } from 'lucide-react';
 import { carService } from '../../api/client';
+import { useModalDismiss } from '../../hooks/useModalDismiss';
 
 export default function BookingFormModal({ car, initialStartDate, initialEndDate, onClose, onSuccess }) {
+  useModalDismiss(Boolean(car), onClose);
+
   const [userName, setUserName] = useState('');
   const [startDate, setStartDate] = useState(initialStartDate || '');
   const [endDate, setEndDate] = useState(initialEndDate || '');

@@ -1,7 +1,10 @@
 import React from 'react';
 import { CheckCircle2, Calendar, ShieldCheck, ArrowRight, User } from 'lucide-react';
+import { useModalDismiss } from '../../hooks/useModalDismiss';
 
 export default function BookingSuccessModal({ rental, car, onClose, onViewRentals }) {
+  useModalDismiss(Boolean(rental), onClose);
+
   if (!rental) return null;
 
   return (

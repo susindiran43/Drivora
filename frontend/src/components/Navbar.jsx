@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Car, BookmarkCheck, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Car, BookmarkCheck } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import { systemService } from '../api/client';
 
@@ -37,7 +37,17 @@ export default function Navbar({ activeTab, onTabChange }) {
         transition: 'all var(--transition-normal)',
       }}
     >
-      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.85rem var(--space-6)' }}>
+      <div
+        className="container"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0.85rem var(--space-6)',
+          flexWrap: 'wrap',
+          gap: 'var(--space-2)',
+        }}
+      >
         {/* Brand Logo & Name */}
         <div
           onClick={() => onTabChange('discover')}
@@ -53,8 +63,8 @@ export default function Navbar({ activeTab, onTabChange }) {
             src="/drivora-logo.jpg"
             alt="Drivora Logo"
             style={{
-              height: '46px',
-              width: '46px',
+              height: '44px',
+              width: '44px',
               objectFit: 'contain',
               borderRadius: 'var(--radius-sm)',
               boxShadow: 'var(--shadow-sm)',
@@ -74,6 +84,7 @@ export default function Navbar({ activeTab, onTabChange }) {
               DRIVORA
             </div>
             <div
+              className="brand-tagline"
               style={{
                 fontSize: '0.68rem',
                 fontWeight: 600,
@@ -89,23 +100,23 @@ export default function Navbar({ activeTab, onTabChange }) {
         </div>
 
         {/* Navigation Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
           <button
             onClick={() => onTabChange('discover')}
             className={`btn ${activeTab === 'discover' ? 'btn-primary' : 'btn-ghost'}`}
-            style={{ fontSize: '0.85rem', padding: '0.55rem 1.1rem' }}
+            style={{ fontSize: '0.825rem', padding: '0.5rem 0.95rem' }}
           >
             <Car size={16} />
-            <span>Fleet</span>
+            <span className="nav-btn-label">Fleet</span>
           </button>
 
           <button
             onClick={() => onTabChange('rentals')}
             className={`btn ${activeTab === 'rentals' ? 'btn-primary' : 'btn-ghost'}`}
-            style={{ fontSize: '0.85rem', padding: '0.55rem 1.1rem' }}
+            style={{ fontSize: '0.825rem', padding: '0.5rem 0.95rem' }}
           >
             <BookmarkCheck size={16} />
-            <span>My Bookings</span>
+            <span className="nav-btn-label">My Bookings</span>
           </button>
 
           {/* API Health Pill */}
@@ -132,7 +143,7 @@ export default function Navbar({ activeTab, onTabChange }) {
                 backgroundColor: apiHealthy === true ? '#10b981' : '#ef4444',
               }}
             />
-            <span style={{ display: 'none', md: 'inline' }}>
+            <span className="nav-status-text">
               {apiHealthy === true ? 'Live' : apiHealthy === false ? 'Offline' : 'Connecting'}
             </span>
           </div>

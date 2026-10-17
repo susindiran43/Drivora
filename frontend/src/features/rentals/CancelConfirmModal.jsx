@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { AlertTriangle, Trash2, Loader2, X, RefreshCw } from 'lucide-react';
 import { rentalService } from '../../api/client';
+import { useModalDismiss } from '../../hooks/useModalDismiss';
 
 export default function CancelConfirmModal({ rental, onClose, onCancelled }) {
+  useModalDismiss(Boolean(rental), onClose);
+
   const [isDeleting, setIsDeleting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 

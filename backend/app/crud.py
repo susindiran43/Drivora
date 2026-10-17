@@ -1,13 +1,21 @@
+"""
+Drivora CRUD Operations & Business Logic
+Handles database queries, half-open interval overlap checking, SQLite transactions, and cancellation.
+"""
 from datetime import date
 from typing import List, Optional
-from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_, text
 from fastapi import HTTPException, status
+from sqlalchemy import or_, text
+from sqlalchemy.orm import Session
+
 from app.models import Car, Rental
 from app.schemas import CarCreate, RentalCreate
 
+HTTP_422 = getattr(status, "HTTP_422_UNPROCESSABLE_CONTENT", status.HTTP_422_UNPROCESSABLE_ENTITY)
+
 
 def get_car_by_id(db: Session, car_id: int) -> Optional[Car]:
+    """Retrieve a vehicle by primary key ID."""
     return db.query(Car).filter(Car.id == car_id).first()
 
 
@@ -24,7 +32,7 @@ def get_available_cars(
 ) -> List[Car]:
     """
     List cars that are operationally available (available == True).
-    If start_date and end_date are provided, filter out cars with conflicting active rentals.
+    If start_date and end_date are provided, filters out cars with active overlapping bookings.
     """
     query = db.query(Car).filter(Car.available == True)
 
@@ -46,12 +54,12 @@ def get_available_cars(
 
     cars = query.offset(skip).limit(limit).all()
 
-    # Optional date-range availability filter
+    # Optional date-range availability filter using half-open intervals
     if start_date and end_date:
         if start_date >= end_date:
             raise HTTPException(
-                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail="start_date must be before end_date",
+                status_code=HTTP_422,
+                detail="start_date must be strictly before end_date",
             )
         filtered_cars = []
         for car in cars:
@@ -73,6 +81,7 @@ def get_available_cars(
 
 
 def create_car(db: Session, car_in: CarCreate) -> Car:
+    """Create a new vehicle record in the fleet."""
     car = Car(
         make=car_in.make.strip(),
         model=car_in.model.strip(),
@@ -93,9 +102,10 @@ def has_conflicting_rental(
     db: Session, car_id: int, start_date: date, end_date: date
 ) -> Optional[Rental]:
     """
-    Half-open interval overlap: [start_date, end_date)
-    existing.start_date < requested.end_date AND existing.end_date > requested.start_date
-    Only active rentals are considered conflicts.
+    Evaluates half-open interval collision: [start_date, end_date)
+    Collision condition:
+        existing.start_date < requested.end_date AND existing.end_date > requested.start_date
+    Only reservations with status == 'ACTIVE' represent conflicts.
     """
     return (
         db.query(Rental)
@@ -111,19 +121,19 @@ def has_conflicting_rental(
 
 def create_rental(db: Session, car_id: int, rental_in: RentalCreate) -> Rental:
     """
-    Creates a new rental with transactional safety and strict overlap prevention.
+    Creates a new rental agreement with transaction serialization and collision checks.
     """
     if rental_in.start_date >= rental_in.end_date:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=HTTP_422,
             detail="Rental start_date must be strictly before end_date.",
         )
 
-    # Use SQLite BEGIN IMMEDIATE for transaction isolation when possible
     bind = db.get_bind()
-    is_sqlite = bind and bind.dialect.name == "sqlite"
+    is_sqlite = bind is not None and bind.dialect.name == "sqlite"
 
     try:
+        # Enforce transaction serialization in SQLite to prevent concurrent booking races
         if is_sqlite and not db.in_transaction():
             db.execute(text("BEGIN IMMEDIATE"))
 
@@ -150,7 +160,6 @@ def create_rental(db: Session, car_id: int, rental_in: RentalCreate) -> Rental:
                 ),
             )
 
-        # Calculate duration and total cost
         duration_days = (rental_in.end_date - rental_in.start_date).days
         total_cost = round(duration_days * car.daily_rate, 2)
 
@@ -169,17 +178,18 @@ def create_rental(db: Session, car_id: int, rental_in: RentalCreate) -> Rental:
     except HTTPException:
         db.rollback()
         raise
-    except Exception as e:
+    except Exception:
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="An unexpected error occurred while processing the rental.",
+            detail="An unexpected error occurred while processing the rental agreement.",
         )
 
 
 def get_rentals(
     db: Session, skip: int = 0, limit: int = 100, user_name: Optional[str] = None
 ) -> List[Rental]:
+    """Retrieve all reservations ordered by newest booking first."""
     query = db.query(Rental).order_by(Rental.rental_date.desc())
     if user_name:
         query = query.filter(Rental.user_name.ilike(f"%{user_name}%"))
@@ -187,14 +197,14 @@ def get_rentals(
 
 
 def get_rental_by_id(db: Session, rental_id: int) -> Optional[Rental]:
+    """Retrieve a single rental record by primary key."""
     return db.query(Rental).filter(Rental.id == rental_id).first()
 
 
 def cancel_rental(db: Session, rental_id: int) -> bool:
     """
-    Cancels an active rental.
-    Updates status to 'CANCELLED', freeing the dates for future bookings.
-    Returns True if found and cancelled, raises 404 if not found.
+    Cancels an active rental agreement.
+    Updates status to 'CANCELLED', releasing dates for subsequent bookings.
     """
     rental = db.query(Rental).filter(Rental.id == rental_id).first()
     if not rental:

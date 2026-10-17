@@ -358,3 +358,22 @@ a {
     gap: var(--space-5);
   }
 }
+
+/* Responsive Navigation & Mobile Screen Tuning */
+@media (max-width: 580px) {
+  .brand-tagline {
+    display: none !important;
+  }
+  .nav-status-text {
+    display: none !important;
+  }
+}
+
+@media (max-width: 440px) {
+  .nav-btn-label {
+    display: none !important;
+  }
+  .btn {
+    padding: 0.5rem 0.75rem !important;
+  }
+}
