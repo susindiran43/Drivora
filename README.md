@@ -1,7 +1,16 @@
 # DRIVORA — Premium Car Rental Platform
 
 > **Brand Tagline:** *Drive. Rent. Explore.*  
-> **Architecture:** FastAPI (Python) • SQLite & SQLAlchemy 2.0 • Alembic • React 18 + Vite • OpenAPI Python SDK
+> **Architecture:** FastAPI (Python) • SQLite & SQLAlchemy 2.0 • Alembic • React 18 + Vite • OpenAPI Python SDK  
+> **Repository:** [https://github.com/susindiran43/Drivora](https://github.com/susindiran43/Drivora)
+
+### Recruiter & Technical Reviewer Quick Links
+- 🚀 **One-Click Setup:** [`setupdev.bat`](#7-prerequisites--installation)
+- ⚡ **Dual-Server Launch:** [`runapplication.bat`](#8-running-the-application)
+- 🧪 **Unit & Concurrency Tests (41/41 Passed):** [Section 11](#11-backend-unit-testing)
+- 🔌 **OpenAPI Python SDK & Smoke Test:** [Section 12](#12-openapi-python-sdk-generation--smoke-test)
+- 📐 **Domain Collision Logic & Half-Open Intervals:** [Section 5](#5-critical-business-logic--domain-rules)
+- 📋 **Recruitment Challenge Compliance Checklist:** [Section 15](#15-requirements-compliance-checklist)
 
 ---
 
