@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: drivora-backend
+    runtime: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: "pip install --upgrade pip && pip install -r backend/requirements.txt"
+    startCommand: "alembic upgrade head && python backend/load_seed.py && uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port $PORT"
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DATABASE_URL
+        value: sqlite:///./drivora.db
+      - key: CORS_ORIGINS
+        value: "https://*.vercel.app,http://localhost:5173,http://localhost:3000,*"

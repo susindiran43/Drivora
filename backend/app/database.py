@@ -5,6 +5,13 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./drivora.db")
 
+# Ensure directory exists if SQLite path has subdirectories
+if DATABASE_URL.startswith("sqlite:///"):
+    db_file_path = DATABASE_URL.replace("sqlite:///", "")
+    db_dir = os.path.dirname(db_file_path)
+    if db_dir and not os.path.exists(db_dir):
+        os.makedirs(db_dir, exist_ok=True)
+
 # SQLite connection args
 connect_args = {"check_same_thread": False, "timeout": 30} if DATABASE_URL.startswith("sqlite") else {}
 

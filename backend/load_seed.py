@@ -1,7 +1,18 @@
 import os
 import sqlite3
 
-def load_seed(db_path: str = "drivora.db", seed_path: str = "seed_data.sql"):
+def load_seed(db_path: str = None, seed_path: str = "seed_data.sql"):
+    if not db_path:
+        db_url = os.getenv("DATABASE_URL", "sqlite:///./drivora.db")
+        if db_url.startswith("sqlite:///"):
+            db_path = db_url.replace("sqlite:///", "")
+        else:
+            db_path = "drivora.db"
+
+    db_dir = os.path.dirname(db_path)
+    if db_dir and not os.path.exists(db_dir):
+        os.makedirs(db_dir, exist_ok=True)
+
     if not os.path.exists(seed_path):
         seed_path = os.path.join(os.path.dirname(__file__), "..", "seed_data.sql")
     if not os.path.exists(seed_path):

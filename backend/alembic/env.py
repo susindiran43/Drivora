@@ -25,10 +25,10 @@ if backend_dir not in sys.path:
 from app.models import Base
 target_metadata = Base.metadata
 
-# other values from the config, defined by the needs of env.py,
-# can be acquired:
-# my_important_option = config.get_main_option("my_important_option")
-# ... etc.
+# Override sqlalchemy.url with DATABASE_URL environment variable if provided
+env_database_url = os.getenv("DATABASE_URL")
+if env_database_url:
+    config.set_main_option("sqlalchemy.url", env_database_url)
 
 
 def run_migrations_offline() -> None:
